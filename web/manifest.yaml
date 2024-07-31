@@ -144,14 +144,7 @@ spec:
             path: nginx.conf
       containers:
       - name: catalogue
-        image: joindevops/web:1.0.0
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "68Mi"
-          limits:
-            cpu: "100m"
-            memory: "128Mi"
+        image: surajk879/web:1.5
         volumeMounts:
         - name: nginx-conf # name of the volume you created above
           mountPath: /etc/nginx/nginx.conf
@@ -174,23 +167,3 @@ spec:
     protocol: TCP
     port: 80 # this port belongs to service
     targetPort: 80 # this port belongs to container
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: web
-  namespace: roboshop
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: web
-  minReplicas: 1
-  maxReplicas: 10
-  metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 75
